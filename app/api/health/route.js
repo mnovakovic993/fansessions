@@ -7,7 +7,8 @@ function check(value) {
   if (!value) return 'MISSING';
   const v = value.trim();
   if (v.startsWith('<') || v.endsWith('>')) return 'PLACEHOLDER (replace with the real value)';
-  if (/[^\x20-\x7E]/.test(v)) return 'INVALID (contains non-ASCII characters)';
+  const bad = v.search(/[^\x20-\x7E]/);
+  if (bad >= 0) return `INVALID (non-ASCII character at position ${bad} of ${v.length}; the value probably still contains instruction text)`;
   return 'set';
 }
 
