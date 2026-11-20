@@ -79,3 +79,6 @@ details summary { cursor: pointer; font-weight: 600; }
   .lp-title { font-size: 34px; }
   .lp-steps, .lp-grid { grid-template-columns: 1fr; }
 }
+.lp-steps > *, .lp-grid > *, .lp-hero > * { min-width: 0; }
+.lp-hero .badge { align-self: flex-start; }
+.lp-thumb, .lp-shot { max-width: 100%; display: block; }
