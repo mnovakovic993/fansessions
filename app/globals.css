@@ -48,3 +48,8 @@ label { font-size: 14px; color: var(--muted); }
 
 .error { color: #ff8a8e; }
 .success { color: var(--ok); }
+
+.legal h2 { margin-top: 28px; margin-bottom: 8px; }
+.legal p, .legal li { color: var(--text); font-size: 15px; }
+.legal ul, .legal ol { padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+.footer { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 32px; }

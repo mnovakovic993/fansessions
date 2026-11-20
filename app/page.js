@@ -27,6 +27,11 @@ export default async function Home({ searchParams }) {
       <div>
         <a className="btn" href="/api/auth/login">Connect with Fanvue</a>
       </div>
+      <div className="footer">
+        <a href="/support">Help &amp; Support</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/privacy">Privacy Policy</a>
+      </div>
     </main>
   );
 }
