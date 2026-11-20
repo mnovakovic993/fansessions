@@ -53,3 +53,7 @@ label { font-size: 14px; color: var(--muted); }
 .legal p, .legal li { color: var(--text); font-size: 15px; }
 .legal ul, .legal ol { padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
 .footer { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 32px; }
+.small { font-size: 13px; }
+.badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+.badge.good { color: #6ee7a8; border-color: rgba(110, 231, 168, 0.4); }
+.badge.warn { color: #fbbf6b; border-color: rgba(251, 191, 107, 0.4); }

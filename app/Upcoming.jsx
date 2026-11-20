@@ -30,13 +30,25 @@ export default function Upcoming({ calls, title = 'Upcoming calls', empty }) {
               {new Date(c.startsAt).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
               {c.durationMin ? <span className="muted"> · {c.durationMin} min</span> : null}
             </div>
-            <a className={open ? 'btn' : 'btn secondary'} href={c.joinUrl} target="_blank" rel="noopener noreferrer">
-              {open ? 'Join call' : 'Open call page'}
-            </a>
+            <div className="row">
+              {!open && c.googleUrl ? (
+                <span className="muted small">
+                  Add to calendar:{' '}
+                  <a href={c.googleUrl} target="_blank" rel="noopener noreferrer">Google</a>
+                  {' · '}
+                  <a href={c.icsUrl} target="_blank" rel="noopener noreferrer">Apple / Outlook</a>
+                </span>
+              ) : null}
+              <a className={open ? 'btn' : 'btn secondary'} href={c.joinUrl} target="_blank" rel="noopener noreferrer">
+                {open ? 'Join call' : 'Open call page'}
+              </a>
+            </div>
           </div>
         );
       })}
-      <div className="muted">The call opens in a new tab 10 minutes before the start time.</div>
+      <div className="muted">
+        The call opens in a new tab 10 minutes before the start time. Add it to your calendar to get a reminder 15 minutes before.
+      </div>
     </section>
   );
 }

@@ -18,6 +18,8 @@ export default function Support() {
         <li>Switch on “Accept bookings” and save.</li>
         <li>Click “Publish on Fanvue”. A “Book a 1:1 video call” experience appears on your profile once Fanvue approves it.</li>
         <li>Booked calls appear under “Upcoming calls”. Click “Join call” at the booked time; the call opens in a new tab.</li>
+        <li>Use “Add to calendar” next to a booked call to get a reminder 15 minutes before it starts.</li>
+        <li>After a call, the creator’s “Past calls” list shows whether it was completed or someone did not join, based on who joined the video room.</li>
       </ol>
       <p>After changing packages or prices, save and click “Update on Fanvue” so your profile shows the new options.</p>
 

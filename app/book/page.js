@@ -18,8 +18,8 @@ export default async function BookPage() {
   }
 
   const packages = await bookablePackages(fan.creator.id);
-  const calls = await upcomingFor({ creatorId: fan.creator.id, fanUuid: fan.fanUuid, role: 'fan', who: fan.fanUuid });
   const name = fan.creator.display_name || fan.creator.handle || 'this creator';
+  const calls = await upcomingFor({ creatorId: fan.creator.id, fanUuid: fan.fanUuid, role: 'fan', who: fan.fanUuid, creatorName: name });
 
   return (
     <main className="wrap stack">

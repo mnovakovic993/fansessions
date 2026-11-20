@@ -46,6 +46,7 @@ export default async function CallPage({ searchParams }) {
   const token = await meetingToken({
     roomName: room.name,
     userName: ticket.role === 'creator' ? creatorName : 'Fan',
+    userId: `${ticket.role}:${ticket.who}`,
     isOwner: ticket.role === 'creator',
     expUnix: Math.floor(new Date(booking.ends_at).getTime() / 1000) + 5 * 60,
   });
