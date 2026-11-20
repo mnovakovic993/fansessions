@@ -17,6 +17,14 @@ export async function POST(request) {
 
   const startsAt = new Date(body.startsAt);
   if (Number.isNaN(startsAt.getTime())) return NextResponse.json({ error: 'invalid_time' }, { status: 400 });
+  // A fan retrying after a cancelled or failed payment releases their own earlier holds first.
+  await db()
+    .from('bookings')
+    .update({ status: 'expired', hold_expires_at: null })
+    .eq('creator_id', fan.creator.id)
+    .eq('fan_uuid', fan.fanUuid)
+    .eq('status', 'held');
+
   const slots = await slotsFor(fan.creator, pkg);
   if (!slots.includes(startsAt.toISOString())) return NextResponse.json({ error: 'slot_taken' }, { status: 409 });
 
