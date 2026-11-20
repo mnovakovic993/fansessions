@@ -1,6 +1,8 @@
 import { currentFan } from '@/lib/session';
 import { bookablePackages } from '@/lib/bookings';
 import Booking from './Booking';
+import Upcoming from '../Upcoming';
+import { upcomingFor } from '@/lib/upcoming';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +18,7 @@ export default async function BookPage() {
   }
 
   const packages = await bookablePackages(fan.creator.id);
+  const calls = await upcomingFor({ creatorId: fan.creator.id, fanUuid: fan.fanUuid, role: 'fan', who: fan.fanUuid });
   const name = fan.creator.display_name || fan.creator.handle || 'this creator';
 
   return (
@@ -24,6 +27,7 @@ export default async function BookPage() {
         <div className="muted">Private 1:1 video call</div>
         <h1>Book a call with {name}</h1>
       </div>
+      <Upcoming calls={calls} title="Your booked calls" />
       {!fan.creator.accepting || packages.length === 0 ? (
         <p className="muted">{name} is not taking bookings right now. Check back later.</p>
       ) : (

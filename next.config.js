@@ -1,18 +1,27 @@
 /** @type {import('next').NextConfig} */
+const security = [
+  // Fanvue frames the creator surface and the fan experience, so it must be allowed as a frame ancestor.
+  { key: 'Content-Security-Policy', value: "frame-ancestors 'self' https://fanvue.com https://*.fanvue.com" },
+  { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+];
+
 const nextConfig = {
   reactStrictMode: true,
   async headers() {
     return [
       {
-        // Fanvue frames the creator surface and the fan experience, so it must be allowed as a frame ancestor.
-        source: '/:path*',
+        // Everything except the call page: no camera or microphone.
+        source: '/((?!call).*)',
+        headers: [...security, { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' }],
+      },
+      {
+        // The call page embeds Daily, which needs camera, microphone and screen capture.
+        source: '/call',
         headers: [
-          { key: 'Content-Security-Policy', value: "frame-ancestors 'self' https://fanvue.com https://*.fanvue.com" },
-          { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          // The call page (phase 3) opens in its own tab and needs camera and microphone there.
-          { key: 'Permissions-Policy', value: 'camera=(self), microphone=(self), geolocation=(), payment=()' },
+          ...security,
+          { key: 'Permissions-Policy', value: 'camera=*, microphone=*, display-capture=*, fullscreen=*, geolocation=(), payment=()' },
         ],
       },
     ];

@@ -3,6 +3,8 @@ import { currentCreator } from '@/lib/session';
 import { loadSettings } from '@/lib/settings';
 import Settings from './Settings';
 import Publish from './Publish';
+import Upcoming from '../Upcoming';
+import { upcomingFor } from '@/lib/upcoming';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,6 +12,7 @@ export default async function Dashboard() {
   const creator = await currentCreator();
   if (!creator) redirect('/');
   const settings = await loadSettings(creator.id);
+  const calls = await upcomingFor({ creatorId: creator.id, role: 'creator', who: creator.fanvue_user_uuid });
 
   return (
     <main className="wrap stack">
@@ -26,6 +29,7 @@ export default async function Dashboard() {
         Signed in as {creator.display_name || creator.handle || 'your Fanvue account'}
         {creator.handle ? ` (@${creator.handle})` : ''}.
       </p>
+      <Upcoming calls={calls} empty="No calls booked yet." />
       <Settings initial={settings} />
       <Publish hasExperience={!!creator.experience_uuid} />
     </main>

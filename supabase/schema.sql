@@ -87,3 +87,13 @@ grant all on all tables in schema public to service_role;
 grant all on all sequences in schema public to service_role;
 alter default privileges in schema public grant all on tables to service_role;
 alter default privileges in schema public grant all on sequences to service_role;
+create table if not exists call_reports (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid references bookings(id) on delete set null,
+  reporter_role text not null check (reporter_role in ('fan', 'creator')),
+  reporter_uuid text,
+  reason text not null,
+  created_at timestamptz not null default now()
+);
+alter table call_reports enable row level security;
+grant all on call_reports to service_role;
