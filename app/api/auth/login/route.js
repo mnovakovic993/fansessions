@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { FANVUE_AUTH_URL, SCOPES, redirectUri } from '@/lib/fanvue';
 import { randomString, pkceChallenge, sign } from '@/lib/crypto';
-import { cookieOptions } from '@/lib/session';
+import { setCookie } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +20,6 @@ export async function GET() {
 
   const res = NextResponse.redirect(url.toString());
   const tenMinutes = 10 * 60 * 1000;
-  res.cookies.set('fs_oauth', sign({ state, verifier, exp: Date.now() + tenMinutes }), cookieOptions(tenMinutes));
+  setCookie(res, 'fs_oauth', sign({ state, verifier, exp: Date.now() + tenMinutes }), tenMinutes);
   return res;
 }

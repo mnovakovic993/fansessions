@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { exchangeCode, apiGet, tokenColumns } from '@/lib/fanvue';
+import { exchangeCode, upsertCreatorFromTokens } from '@/lib/fanvue';
 import { unsign } from '@/lib/crypto';
-import { db } from '@/lib/supabase';
-import { SESSION_COOKIE, SESSION_MAX_AGE, cookieOptions, sessionValue } from '@/lib/session';
+import { SESSION_COOKIE, SESSION_MAX_AGE, setCookie, sessionValue } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,38 +30,16 @@ export async function GET(request) {
     return fail('token_exchange_failed');
   }
 
-  let me;
+  let creatorId;
   try {
-    me = await apiGet('/v1/users/me', tokens.access_token);
+    creatorId = await upsertCreatorFromTokens(tokens);
   } catch (e) {
-    console.error(e);
-    return fail('profile_failed');
-  }
-  const user = me?.data ?? me;
-  const fanvueUuid = user?.uuid || user?.userUuid || user?.id;
-  if (!fanvueUuid) return fail('profile_missing_uuid');
-
-  const { data: creator, error } = await db()
-    .from('creators')
-    .upsert(
-      {
-        fanvue_user_uuid: String(fanvueUuid),
-        handle: user.handle ?? null,
-        display_name: user.displayName ?? user.display_name ?? null,
-        ...tokenColumns(tokens),
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'fanvue_user_uuid' }
-    )
-    .select('id')
-    .single();
-  if (error) {
-    console.error(error);
-    return fail('db_failed');
+    console.error(e, e.cause);
+    return fail(e.message === 'db_failed' ? 'db_failed' : 'profile_failed');
   }
 
   const res = NextResponse.redirect(new URL('/dashboard', process.env.APP_URL).toString());
-  res.cookies.set(SESSION_COOKIE, sessionValue(creator.id), cookieOptions(SESSION_MAX_AGE));
-  res.cookies.set('fs_oauth', '', cookieOptions(0));
+  setCookie(res, SESSION_COOKIE, sessionValue(creatorId), SESSION_MAX_AGE);
+  setCookie(res, 'fs_oauth', '', 0);
   return res;
 }

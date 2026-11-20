@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { currentCreator } from '@/lib/session';
 import { loadSettings } from '@/lib/settings';
 import Settings from './Settings';
+import Publish from './Publish';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +27,7 @@ export default async function Dashboard() {
         {creator.handle ? ` (@${creator.handle})` : ''}.
       </p>
       <Settings initial={settings} />
+      <Publish hasExperience={!!creator.experience_uuid} />
     </main>
   );
 }

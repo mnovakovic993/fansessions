@@ -14,6 +14,7 @@ create table if not exists creators (
   access_token_enc text,
   refresh_token_enc text,
   token_expires_at timestamptz,
+  experience_uuid text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

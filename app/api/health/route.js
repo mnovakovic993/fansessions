@@ -23,6 +23,8 @@ export async function GET() {
     'DAILY_DOMAIN',
     'SESSION_SECRET',
     'TOKEN_ENCRYPTION_KEY',
+    'FANVUE_APP_UUID',
+    'FANVUE_WEBHOOK_SECRET',
   ];
   const env = Object.fromEntries(names.map((n) => [n, check(process.env[n])]));
   const ok = Object.values(env).every((s) => s === 'set');
